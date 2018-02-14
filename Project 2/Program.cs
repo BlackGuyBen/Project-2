@@ -27,11 +27,11 @@ namespace Project_2
                 ReadDataHTML();
             }
         }
-        static void ReadDataTXT()
+        public static void ReadDataTXT()
         {
             try
             {
-                using (var NFL = new StreamReader(@"C:Super_Bowl_Project.csv"))
+                using (var NFL = new StreamReader(@"C:\Users\olubeno\OneDrive - dunwoody.edu\Spring 2018\CWEB - Advanced Programming\Visual Studio\Project 2\Super_Bowl_Project.csv"))
                 {
                     string line;
                     while ((line = NFL.ReadLine())  != null)
@@ -54,20 +54,26 @@ namespace Project_2
         }//End of TXT
 
          //write the the csv to txt
-        static void WriteDataTXT(string line)
+        public static void WriteDataTXT(string line)
         {
             string SuperBowlStats;
 
-            Console.WriteLine("Where would you like to save this file?");
+            Console.WriteLine("Please type the location you would like to" +
+                               "to save the file to?");
             SuperBowlStats = Console.ReadLine();
 
+
+            //COME BACK TO THIS MAY NOT BE RIGHT
             if (!File.Exists(SuperBowlStats))
             {
                 File.Create(SuperBowlStats);
             }
             
+
             List<string> ListA = new List<string>();
             List<string> ListB = new List<string>();
+            List<string> ListC = new List<string>();
+            
 
             var EachRow = line.Split(',');
 
@@ -75,17 +81,24 @@ namespace Project_2
 
         }
         
-        static void ReadDataHTML()
+
+        //HTML STARTING. COME BACK TO THIS IF YOU HAVE TIME.
+        public static void ReadDataHTML()
         {
             try
             {
-                using (var NFL = new StreamReader(@"C:Super_Bowl_Project.csv"))
+                using (var NFL = new StreamReader(@"C:\Users\olubeno\OneDrive - dunwoody.edu\Spring 2018\CWEB - Advanced Programming\Visual Studio\Project 2\Super_Bowl_Project.csv"))
                 {
-                    foreach (var lineNumber in NFL)
+                    string line;
+                    while ((line = NFL.ReadLine()) != null)
+                    {
+                        WriteDataHTML(line);
+                    }
+                    /*foreach (var lineNumber in NFL)
                     {
                         String line = NFL.ReadToEnd();
                         //write the file to html
-                    }
+                    }*/
                 }
             }
             catch (Exception e)
@@ -94,6 +107,15 @@ namespace Project_2
                 Console.WriteLine(e.Message);
             }
         }//end of HTML
+
+        public static void WriteDataHTML(string line)
+        {
+            string SuperBowlStats;
+
+            Console.WriteLine("Please type the location you would like to" +
+                               "to save the file to?");
+            SuperBowlStats = Console.ReadLine();
+        }
     }
 
     
