@@ -33,12 +33,16 @@ namespace Project_2
             {
                 using (var NFL = new StreamReader(@"C:Super_Bowl_Project.csv"))
                 {
-                    foreach (var lineNumber in NFL)
+                    string line;
+                    while ((line = NFL.ReadLine())  != null)
+                    {
+                        WriteDataTXT(line);
+                    }
+                    /*foreach (var lineNumber in NFL)
                     {
                         String line = NFL.ReadToEnd();
-                        WriteDataTXT(line);
-                        //write the file to txt
-                    }
+                        WriteDataTXT(line); //write the file to txt
+                    }*/
                 }
             }
             catch (Exception e)
