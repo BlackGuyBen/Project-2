@@ -36,6 +36,7 @@ namespace Project_2
                     foreach (var lineNumber in NFL)
                     {
                         String line = NFL.ReadToEnd();
+                        WriteDataTXT(line);
                         //write the file to txt
                     }
                 }
@@ -45,7 +46,30 @@ namespace Project_2
                 Console.WriteLine("The File could not be read:");
                 Console.WriteLine(e.Message);
             }
+
         }//End of TXT
+
+         //write the the csv to txt
+        static void WriteDataTXT(string line)
+        {
+            string SuperBowlStats;
+
+            Console.WriteLine("Where would you like to save this file?");
+            SuperBowlStats = Console.ReadLine();
+
+            if (!File.Exists(SuperBowlStats))
+            {
+                File.Create(SuperBowlStats);
+            }
+            
+            List<string> ListA = new List<string>();
+            List<string> ListB = new List<string>();
+
+            var EachRow = line.Split(',');
+
+
+
+        }
         
         static void ReadDataHTML()
         {
