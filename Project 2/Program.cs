@@ -22,15 +22,21 @@ namespace Project_2
             {
                 ReadDataTXT();
             }
-            else
+            else if (fileType == "HTML")
             {
                 ReadDataHTML();
+            }
+            else
+            {
+                Console.WriteLine("Invalid Entry. Please try again.");
+                Main(args);
             }
         }
         public static void ReadDataTXT()
         {
             try
             {
+                //Change file path if needed.
                 using (var NFL = new StreamReader(@"C:\Users\olubeno\OneDrive - dunwoody.edu\Spring 2018\CWEB - Advanced Programming\Visual Studio\Project 2\Super_Bowl_Project.csv"))
                 {
                     string line;
@@ -38,6 +44,8 @@ namespace Project_2
                     {
                         WriteDataTXT(line);
                     }
+
+                    
                     /*foreach (var lineNumber in NFL)
                     {
                         String line = NFL.ReadToEnd();
@@ -56,29 +64,35 @@ namespace Project_2
          //write the the csv to txt
         public static void WriteDataTXT(string line)
         {
-            string SuperBowlStats;
-
-            Console.WriteLine("Please type the location you would like to" +
-                               "to save the file to?");
-            SuperBowlStats = Console.ReadLine();
-
-
-            //COME BACK TO THIS MAY NOT BE RIGHT
-            if (!File.Exists(SuperBowlStats))
+            //THIS SHOULDN'T BE HERE. IT IS REPEATING WHERE TO SAVE THE FILE EVERY TIME
+            try
             {
-                File.Create(SuperBowlStats);
+                string SuperBowlStats;
+
+                Console.WriteLine("Please type the location you would like to" +
+                                   "save the file to:");
+                SuperBowlStats = Console.ReadLine();
+
+                //COME BACK TO THIS MAY NOT BE RIGHT
+                if (!File.Exists(SuperBowlStats))
+                {
+                    File.Create(SuperBowlStats);
+                }
+
+
+                List<string> ListA = new List<string>();
+                List<string> ListB = new List<string>();
+                List<string> ListC = new List<string>();
+
+
+                var EachRow = line.Split(',');
             }
-            
 
-            List<string> ListA = new List<string>();
-            List<string> ListB = new List<string>();
-            List<string> ListC = new List<string>();
-            
-
-            var EachRow = line.Split(',');
-
-
-
+            catch (Exception i)
+            {
+                Console.WriteLine("The file could not be created.");
+                Console.WriteLine(i.Message);
+            }
         }
         
 
