@@ -40,17 +40,17 @@ namespace Project_2
                 using (var NFL = new StreamReader(@"C:\Users\olubeno\OneDrive - dunwoody.edu\Spring 2018\CWEB - Advanced Programming\Visual Studio\Project 2\Super_Bowl_Project.csv"))
                 {
                     string line;
-                    while ((line = NFL.ReadLine())  != null)
+                    /*while ((line = NFL.ReadLine())  != null)
                     {
                         WriteDataTXT(line);
-                    }
-
-                    
-                    /*foreach (var lineNumber in NFL)
-                    {
-                        String line = NFL.ReadToEnd();
-                        WriteDataTXT(line); //write the file to txt
                     }*/
+                
+                    
+                    foreach (var lineNumber in NFL)
+                    {
+                        line = NFL.ReadToEnd();
+                        WriteDataTXT(line); //call to write the file to txt
+                    }
                 }
             }
             catch (Exception e)
@@ -130,6 +130,8 @@ namespace Project_2
                                "to save the file to?");
             SuperBowlStats = Console.ReadLine();
         }
+
+        public bool EndOfStream { get; }
     }
 
     
