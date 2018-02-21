@@ -34,29 +34,46 @@ namespace Project_2
         }
         public static void ReadDataTXT()
         {
+            const string NFLFile = @"C:\Users\olubeno\OneDrive - dunwoody.edu\Spring 2018\CWEB - Advanced Programming\Visual Studio\Project 2\Super_Bowl_Project.csv";
+            List<Stats> statsIn = new List<Stats>();
+            string[] StatsFromFile;
+            Stats OneRow;
+            
+
             try
             {
                 //Change file path if needed.
-                using (var NFL = new StreamReader(@"C:\Users\olubeno\OneDrive - dunwoody.edu\Spring 2018\CWEB - Advanced Programming\Visual Studio\Project 2\Super_Bowl_Project.csv"))
+                //using (var NFL = new StreamReader(@"C:\Users\olubeno\OneDrive - dunwoody.edu\Spring 2018\CWEB - Advanced Programming\Visual Studio\Project 2\Super_Bowl_Project.csv"))
                 {
-                    string line;
-                    /*while ((line = NFL.ReadLine())  != null)
+                    //string line;
+                    FileStream Stats = new FileStream(NFLFile, FileMode.Open, FileAccess.Read);
+                    StreamReader readIn = new StreamReader(Stats);
+
+                    while (!readIn.EndOfStream)
                     {
-                        WriteDataTXT(line);
-                    }*/
+                        StatsFromFile = readIn.ReadLine().Split(',');
+                        OneRow = new Stats(StatsFromFile[0], StatsFromFile[1], Convert.ToDouble(StatsFromFile[2]), StatsFromFile[3],
+                                            StatsFromFile[4], StatsFromFile[5], Convert.ToInt32(StatsFromFile[6]), StatsFromFile[7],
+                                            StatsFromFile[8], StatsFromFile[9], Convert.ToInt32(StatsFromFile[10]), StatsFromFile[11],
+                                            StatsFromFile[12], StatsFromFile[13], StatsFromFile[14]);
+                        statsIn.Add(OneRow);
+                    }
+                    readIn.Close();
+                    Stats.Close();
                 
                     
-                    foreach (var lineNumber in NFL)
+                    /*foreach (var lineNumber in NFL)
                     {
                         line = NFL.ReadToEnd();
                         WriteDataTXT(line); //call to write the file to txt
-                    }
+                    }*/
                 }
             }
             catch (Exception e)
             {
                 Console.WriteLine("The File could not be read:");
                 Console.WriteLine(e.Message);
+                Console.ReadLine();
             }
 
         }//End of TXT
@@ -68,24 +85,23 @@ namespace Project_2
             try
             {
                 string SuperBowlStats;
-
-                Console.WriteLine("Please type the location you would like to" +
-                                   "save the file to:");
+                string FilePath;
+                var EachRow = line.Split(',');
+                
+                Console.WriteLine("Please type the name of the file. (You don't need to type the extention)");
                 SuperBowlStats = Console.ReadLine();
 
+                Console.WriteLine("Where would you like to save the file to?");
+                FilePath = Console.ReadLine();
+
                 //COME BACK TO THIS MAY NOT BE RIGHT
-                if (!File.Exists(SuperBowlStats))
+                if (!File.Exists(FilePath))
                 {
-                    File.Create(SuperBowlStats);
+                    File.Create(FilePath);
+                    TextWriter text = new StreamWriter(FilePath);
+                    text.WriteLine(line);
+                    text.Close();
                 }
-
-
-                List<string> ListA = new List<string>();
-                List<string> ListB = new List<string>();
-                List<string> ListC = new List<string>();
-
-
-                var EachRow = line.Split(',');
             }
 
             catch (Exception i)
@@ -132,6 +148,34 @@ namespace Project_2
         }
 
         public bool EndOfStream { get; }
+    }
+    class Stats
+    {
+        public string DateFromFile { get; set; }
+        public string SBFromFile { get; set; }
+        public double AttFromFile { get; set; }
+        public string[] QBWinFromFile { get; set; }
+        public string[] CoachWinFromFile { get; set; }
+        public string[] WinnerFromFile { get; set; }
+        public int WinPtFromFile { get; set; }
+        public string[] QBLoserFromFile { get; set; }
+        public string[] CoachLostFromFile { get; set; }
+        public string[] LoserFromFile { get; set; }
+        public int LosingPtFromFile { get; set; }
+        public string[] MVPFromFile { get; set; }
+        public string[] StadiumFromFile { get; set; }
+        public string[] CityFromFile { get; set; }
+        public string[] StateFromFile { get; set; }
+
+        public Stats(string DateFromFile, string SBFromFile, double AttFromFile,
+            string QBWinFromFile, string CoachWinFromFile, string WinnerFromFile,
+            int WinPtFromFile, string QBLoserFromFile, string CoachLostFromFile,
+            string LoserFromFile, int LosingPtFromFile, string MVPFromFile, 
+            string StadiumFromFile, string CityFromFile, string StateFromFile)
+        {
+            this.DateFromFile = DateFromFile;
+        }
+
     }
 
     
