@@ -34,20 +34,19 @@ namespace Project_2
         }
         public static void ReadDataTXT()
         {
-            const string NFLFile = @"C:\Users\olubeno\OneDrive - dunwoody.edu\Spring 2018\CWEB - Advanced Programming\Visual Studio\Project 2\Super_Bowl_Project.csv";
+            //Console.WriteLine("Please type the file location where Super Bowl Stats is saved:");
+            string NFLFile = @"C:\Users\olubeno\OneDrive - dunwoody.edu\Spring 2018\CWEB - Advanced Programming\Visual Studio\Project 2\Super_Bowl_Project.csv";
             List<Stats> statsIn = new List<Stats>();
             string[] StatsFromFile;
             Stats OneRow;
-            
 
             try
             {
-                //Change file path if needed.
-                //using (var NFL = new StreamReader(@"C:\Users\olubeno\OneDrive - dunwoody.edu\Spring 2018\CWEB - Advanced Programming\Visual Studio\Project 2\Super_Bowl_Project.csv"))
-                {
-                    //string line;
+                    
                     FileStream Stats = new FileStream(NFLFile, FileMode.Open, FileAccess.Read);
                     StreamReader readIn = new StreamReader(Stats);
+                string header = readIn.ReadLine();
+  
 
                     while (!readIn.EndOfStream)
                     {
@@ -56,50 +55,118 @@ namespace Project_2
                                             StatsFromFile[4], StatsFromFile[5], Convert.ToInt32(StatsFromFile[6]), StatsFromFile[7],
                                             StatsFromFile[8], StatsFromFile[9], Convert.ToInt32(StatsFromFile[10]), StatsFromFile[11],
                                             StatsFromFile[12], StatsFromFile[13], StatsFromFile[14]);
-                        statsIn.Add(OneRow);
+
+                    statsIn.Add(header);//Come Back to this
+                    statsIn.Add(OneRow);
                     }
                     readIn.Close();
                     Stats.Close();
+              
                 
-                    
-                    /*foreach (var lineNumber in NFL)
-                    {
-                        line = NFL.ReadToEnd();
-                        WriteDataTXT(line); //call to write the file to txt
-                    }*/
-                }
             }
+            
             catch (Exception e)
             {
                 Console.WriteLine("The File could not be read:");
                 Console.WriteLine(e.Message);
+                Console.WriteLine("The program will now end");
                 Console.ReadLine();
             }
+
+            WriteDataTXT(statsIn);
 
         }//End of TXT
 
          //write the the csv to txt
-        public static void WriteDataTXT(string line)
+        public static void WriteDataTXT(List<Stats> statsIn)
         {
-            //THIS SHOULDN'T BE HERE. IT IS REPEATING WHERE TO SAVE THE FILE EVERY TIME
             try
             {
-                string SuperBowlStats;
                 string FilePath;
-                var EachRow = line.Split(',');
-                
-                Console.WriteLine("Please type the name of the file. (You don't need to type the extention)");
-                SuperBowlStats = Console.ReadLine();
+                string FileName;
 
+                //Creating the txt File
+                Console.WriteLine("Please type the name of the file. (You don't need to type the extention)");
+                FileName = Console.ReadLine();
                 Console.WriteLine("Where would you like to save the file to?");
-                FilePath = Console.ReadLine();
+                FilePath = Console.ReadLine() + @"\" + FileName + ".txt"; //The Full name of txt file
+                Console.WriteLine("Here is your full file name:");
+                Console.WriteLine(FilePath);
+                Console.ReadLine();
+
+                //FileStream newTextFile = new FileStream(FilePath, FileMode.Create, FileAccess.Write);
+                TextWriter writeText = new StreamWriter(FilePath);
+
+                
+                
+                writeText.WriteLine(statsIn);
+                //newTextFile.Close();
+                writeText.Close();
+            }
+
+            catch (Exception i)
+            {
+                Console.WriteLine("The file could not be created.");
+                Console.WriteLine(i.Message);
+                Console.WriteLine("The program will now close");
+                Console.ReadLine();
+            }
+        }
+        
+
+        //HTML STARTING. COME BACK TO THIS IF YOU HAVE TIME.
+        public static void ReadDataHTML()
+        {
+            Console.WriteLine("Please type the file location where Super Bowl Stats is saved:");
+            string NFLFile = Console.ReadLine();
+            List<Stats> statsIn = new List<Stats>();
+            string[] StatsFromFile;
+            Stats OneRow;
+            try
+            {
+                using (var NFL = new StreamReader(@"C:\Users\olubeno\OneDrive - dunwoody.edu\Spring 2018\CWEB - Advanced Programming\Visual Studio\Project 2\Super_Bowl_Project.csv"))
+                {
+                    while (!NFL.EndOfStream)
+                    {
+                        
+                            StatsFromFile = NFL.ReadLine().Split(',');
+                            OneRow = new Stats(StatsFromFile[0], StatsFromFile[1], Convert.ToDouble(StatsFromFile[2]), StatsFromFile[3],
+                                                StatsFromFile[4], StatsFromFile[5], Convert.ToInt32(StatsFromFile[6]), StatsFromFile[7],
+                                                StatsFromFile[8], StatsFromFile[9], Convert.ToInt32(StatsFromFile[10]), StatsFromFile[11],
+                                                StatsFromFile[12], StatsFromFile[13], StatsFromFile[14]);
+                            statsIn.Add(OneRow);
+                        
+                    }
+                    NFL.Close();
+                    //Stats.Close();
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("The File could not be read");
+                Console.WriteLine(e.Message);
+            }
+        }//end of HTML
+
+        public static void WriteDataHTML(List<Stats> statsIn)
+        {
+            try
+            {
+                string FilePath;
+                string FileName;
+
+
+                Console.WriteLine("Please type the name of the file. (You don't need to type the extention)");
+                FileName = Console.ReadLine();
+                Console.WriteLine("Where would you like to save the file to?");
+                FilePath = Console.ReadLine() + FileName;
 
                 //COME BACK TO THIS MAY NOT BE RIGHT
                 if (!File.Exists(FilePath))
                 {
                     File.Create(FilePath);
                     TextWriter text = new StreamWriter(FilePath);
-                    text.WriteLine(line);
+                    text.WriteLine(statsIn);
                     text.Close();
                 }
             }
@@ -110,62 +177,25 @@ namespace Project_2
                 Console.WriteLine(i.Message);
             }
         }
-        
 
-        //HTML STARTING. COME BACK TO THIS IF YOU HAVE TIME.
-        public static void ReadDataHTML()
-        {
-            try
-            {
-                using (var NFL = new StreamReader(@"C:\Users\olubeno\OneDrive - dunwoody.edu\Spring 2018\CWEB - Advanced Programming\Visual Studio\Project 2\Super_Bowl_Project.csv"))
-                {
-                    string line;
-                    while ((line = NFL.ReadLine()) != null)
-                    {
-                        WriteDataHTML(line);
-                    }
-                    /*foreach (var lineNumber in NFL)
-                    {
-                        String line = NFL.ReadToEnd();
-                        //write the file to html
-                    }*/
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("The File could not be read");
-                Console.WriteLine(e.Message);
-            }
-        }//end of HTML
-
-        public static void WriteDataHTML(string line)
-        {
-            string SuperBowlStats;
-
-            Console.WriteLine("Please type the location you would like to" +
-                               "to save the file to?");
-            SuperBowlStats = Console.ReadLine();
-        }
-
-        public bool EndOfStream { get; }
     }
     class Stats
     {
         public string DateFromFile { get; set; }
         public string SBFromFile { get; set; }
         public double AttFromFile { get; set; }
-        public string[] QBWinFromFile { get; set; }
-        public string[] CoachWinFromFile { get; set; }
-        public string[] WinnerFromFile { get; set; }
+        public string QBWinFromFile { get; set; }
+        public string CoachWinFromFile { get; set; }
+        public string WinnerFromFile { get; set; }
         public int WinPtFromFile { get; set; }
-        public string[] QBLoserFromFile { get; set; }
-        public string[] CoachLostFromFile { get; set; }
-        public string[] LoserFromFile { get; set; }
+        public string QBLoserFromFile { get; set; }
+        public string CoachLostFromFile { get; set; }
+        public string LoserFromFile { get; set; }
         public int LosingPtFromFile { get; set; }
-        public string[] MVPFromFile { get; set; }
-        public string[] StadiumFromFile { get; set; }
-        public string[] CityFromFile { get; set; }
-        public string[] StateFromFile { get; set; }
+        public string MVPFromFile { get; set; }
+        public string StadiumFromFile { get; set; }
+        public string CityFromFile { get; set; }
+        public string StateFromFile { get; set; }
 
         public Stats(string DateFromFile, string SBFromFile, double AttFromFile,
             string QBWinFromFile, string CoachWinFromFile, string WinnerFromFile,
@@ -174,6 +204,21 @@ namespace Project_2
             string StadiumFromFile, string CityFromFile, string StateFromFile)
         {
             this.DateFromFile = DateFromFile;
+            this.SBFromFile = SBFromFile;
+            this.AttFromFile = AttFromFile;
+            this.QBWinFromFile = QBWinFromFile;
+            this.CoachWinFromFile = CoachWinFromFile;
+            this.WinnerFromFile = WinnerFromFile;
+            this.WinPtFromFile = WinPtFromFile;
+            this.QBLoserFromFile = QBLoserFromFile;
+            this.CoachLostFromFile = CoachLostFromFile;
+            this.LoserFromFile = LoserFromFile;
+            this.LosingPtFromFile = LosingPtFromFile;
+            this.MVPFromFile = MVPFromFile;
+            this.StadiumFromFile = StadiumFromFile;
+            this.CityFromFile = CityFromFile;
+            this.StateFromFile = StateFromFile;
+
         }
 
     }
