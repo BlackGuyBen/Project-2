@@ -56,8 +56,9 @@ namespace Project_2
                                             StatsFromFile[8], StatsFromFile[9], Convert.ToInt32(StatsFromFile[10]), StatsFromFile[11],
                                             StatsFromFile[12], StatsFromFile[13], StatsFromFile[14]);
 
-                    statsIn.Add(header);//Come Back to this
+                    
                     statsIn.Add(OneRow);
+                    
                     }
                     readIn.Close();
                     Stats.Close();
@@ -97,11 +98,17 @@ namespace Project_2
                 //FileStream newTextFile = new FileStream(FilePath, FileMode.Create, FileAccess.Write);
                 TextWriter writeText = new StreamWriter(FilePath);
 
+
+                foreach (String val in Stats.statsIn)
+                {
+                    writeText.WriteLine(val);
+                }
+
+                //string conversion = string.Join(",", statsIn);
+                //writeText.WriteLine(conversion);
                 
-                
-                writeText.WriteLine(statsIn);
-                //newTextFile.Close();
                 writeText.Close();
+               
             }
 
             catch (Exception i)
@@ -112,7 +119,8 @@ namespace Project_2
                 Console.ReadLine();
             }
         }
-        
+
+ 
 
         //HTML STARTING. COME BACK TO THIS IF YOU HAVE TIME.
         public static void ReadDataHTML()
@@ -138,7 +146,7 @@ namespace Project_2
                         
                     }
                     NFL.Close();
-                    //Stats.Close();
+                    
                 }
             }
             catch (Exception e)
@@ -220,6 +228,14 @@ namespace Project_2
             this.StateFromFile = StateFromFile;
 
         }
+
+        public override string ToString()
+        {
+            return String.Format($"Date: {DateFromFile} \nSuperBowl: {SBFromFile} \nAttendance: {AttFromFile} \nWinning QuarterBack: {QBWinFromFile} \nWinning Coach: {CoachWinFromFile} \nWinning Team:{WinnerFromFile}" +
+                                $"\nWinning Points: {WinPtFromFile} \nLosing QuarterBack: {QBLoserFromFile} \nLosing Coach: {CoachLostFromFile} \nLosing Team: {LoserFromFile} \nLosing Points: {LosingPtFromFile}" +
+                                $"\nMVP For the Game: {MVPFromFile} \nStadium: {StadiumFromFile} \nCity: {CityFromFile} \nState: {StateFromFile}");
+        }
+        
 
     }
 
