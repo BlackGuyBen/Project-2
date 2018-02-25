@@ -95,17 +95,18 @@ namespace Project_2
                 Console.WriteLine(FilePath);
                 Console.ReadLine();
 
-                //FileStream newTextFile = new FileStream(FilePath, FileMode.Create, FileAccess.Write);
+                
                 TextWriter writeText = new StreamWriter(FilePath);
 
-
-                foreach (String val in Stats.statsIn)
+                //Writing each row of statsIn to the txt file
+                foreach (var row in statsIn)
                 {
-                    writeText.WriteLine(val);
+                    writeText.WriteLine(row);
+                    writeText.WriteLine();
                 }
 
-                //string conversion = string.Join(",", statsIn);
-                //writeText.WriteLine(conversion);
+
+  
                 
                 writeText.Close();
                
@@ -125,35 +126,48 @@ namespace Project_2
         //HTML STARTING. COME BACK TO THIS IF YOU HAVE TIME.
         public static void ReadDataHTML()
         {
-            Console.WriteLine("Please type the file location where Super Bowl Stats is saved:");
-            string NFLFile = Console.ReadLine();
+            string NFLFile = @"C:\Users\olubeno\OneDrive - dunwoody.edu\Spring 2018\CWEB - Advanced Programming\Visual Studio\Project 2\Super_Bowl_Project.csv";
             List<Stats> statsIn = new List<Stats>();
             string[] StatsFromFile;
             Stats OneRow;
+
             try
             {
-                using (var NFL = new StreamReader(@"C:\Users\olubeno\OneDrive - dunwoody.edu\Spring 2018\CWEB - Advanced Programming\Visual Studio\Project 2\Super_Bowl_Project.csv"))
+
+                FileStream Stats = new FileStream(NFLFile, FileMode.Open, FileAccess.Read);
+                StreamReader readIn = new StreamReader(Stats);
+                string header = readIn.ReadLine();
+
+
+                while (!readIn.EndOfStream)
                 {
-                    while (!NFL.EndOfStream)
-                    {
-                        
-                            StatsFromFile = NFL.ReadLine().Split(',');
-                            OneRow = new Stats(StatsFromFile[0], StatsFromFile[1], Convert.ToDouble(StatsFromFile[2]), StatsFromFile[3],
-                                                StatsFromFile[4], StatsFromFile[5], Convert.ToInt32(StatsFromFile[6]), StatsFromFile[7],
-                                                StatsFromFile[8], StatsFromFile[9], Convert.ToInt32(StatsFromFile[10]), StatsFromFile[11],
-                                                StatsFromFile[12], StatsFromFile[13], StatsFromFile[14]);
-                            statsIn.Add(OneRow);
-                        
-                    }
-                    NFL.Close();
-                    
+                    StatsFromFile = readIn.ReadLine().Split(',');
+                    OneRow = new Stats(StatsFromFile[0], StatsFromFile[1], Convert.ToDouble(StatsFromFile[2]), StatsFromFile[3],
+                                        StatsFromFile[4], StatsFromFile[5], Convert.ToInt32(StatsFromFile[6]), StatsFromFile[7],
+                                        StatsFromFile[8], StatsFromFile[9], Convert.ToInt32(StatsFromFile[10]), StatsFromFile[11],
+                                        StatsFromFile[12], StatsFromFile[13], StatsFromFile[14]);
+
+
+                    statsIn.Add(OneRow);
+
                 }
+                readIn.Close();
+                Stats.Close();
+
+
             }
+
             catch (Exception e)
             {
-                Console.WriteLine("The File could not be read");
+                Console.WriteLine("The File could not be read:");
                 Console.WriteLine(e.Message);
+                Console.WriteLine("The program will now end");
+                Console.ReadLine();
             }
+
+            WriteDataHTML(statsIn);
+
+          
         }//end of HTML
 
         public static void WriteDataHTML(List<Stats> statsIn)
@@ -167,16 +181,22 @@ namespace Project_2
                 Console.WriteLine("Please type the name of the file. (You don't need to type the extention)");
                 FileName = Console.ReadLine();
                 Console.WriteLine("Where would you like to save the file to?");
-                FilePath = Console.ReadLine() + FileName;
+                FilePath = Console.ReadLine() + @"\" + FileName + ".html"; //The Full name of html file
+                Console.WriteLine("Here is your full file name:");
+                Console.WriteLine(FilePath);
+                Console.ReadLine();
 
                 //COME BACK TO THIS MAY NOT BE RIGHT
-                if (!File.Exists(FilePath))
+                TextWriter writeHTML = new StreamWriter(FilePath);
+
+                //Writing each row of statsIn to the html file
+                foreach (var row in statsIn)
                 {
-                    File.Create(FilePath);
-                    TextWriter text = new StreamWriter(FilePath);
-                    text.WriteLine(statsIn);
-                    text.Close();
+                    writeHTML.WriteLine(row);
+                    writeHTML.WriteLine();
                 }
+
+                writeHTML.Close();
             }
 
             catch (Exception i)
@@ -185,8 +205,17 @@ namespace Project_2
                 Console.WriteLine(i.Message);
             }
         }
+        //Winners displayed in text
+        public static void Winners(List<Stats> statsIn)
+        {
+            foreach (var row in statsIn)
+            {
+                //WriteDataTXT
+            }
+        }
 
     }
+
     class Stats
     {
         public string DateFromFile { get; set; }
