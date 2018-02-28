@@ -20,9 +20,9 @@ namespace Project_2
 
             if (fileType == "TXT")
             {
-                ReadDataTXT();
+                CreateTXT();
             }
-            else if (fileType == "HTML")
+            else if (fileType == "HTML") //FINISH THIS WITH NEW METHOD (CreateHTML():)
             {
                 ReadDataHTML();
             }
@@ -31,39 +31,90 @@ namespace Project_2
                 Console.WriteLine("Invalid Entry. Please try again.");
                 Main(args);
             }
+
         }
-        public static void ReadDataTXT()
+
+        public static void CreateTXT()
         {
-            //Console.WriteLine("Please type the file location where Super Bowl Stats is saved:");
+            try
+            {
+                string FilePath;
+                string FileName;
+
+                Console.WriteLine("Please type the name of the file. (You don't need to type the extention)");
+                FileName = Console.ReadLine();
+                Console.WriteLine("Where would you like to save the file to?");
+                FilePath = Console.ReadLine() + @"\" + FileName + ".txt"; //The Full name of txt file
+                Console.WriteLine("Here is your full file name:");
+                Console.WriteLine(FilePath);
+                Console.ReadLine();
+
+                ReadDataTXT(FilePath);
+
+                //WriteDataTXT(FilePath, statsIn, TempRow);
+            }
+
+            catch (Exception i)
+            {
+                Console.WriteLine("The file could not be created.");
+                Console.WriteLine(i.Message);
+                Console.WriteLine("The program will now close");
+                Console.ReadLine();
+            }
+
+
+        }
+        public static void ReadDataTXT(string FilePath)
+        {
+            
             string NFLFile = @"C:\Users\olubeno\OneDrive - dunwoody.edu\Spring 2018\CWEB - Advanced Programming\Visual Studio\Project 2\Super_Bowl_Project.csv";
             List<Stats> statsIn = new List<Stats>();
+            //List<Stats> OneRow = new List<Stats>();
+
+            
             string[] StatsFromFile;
             Stats OneRow;
 
+            
+
+
+
             try
             {
-                    
-                    FileStream Stats = new FileStream(NFLFile, FileMode.Open, FileAccess.Read);
-                    StreamReader readIn = new StreamReader(Stats);
+                    FileStream StatsFile = new FileStream(NFLFile, FileMode.Open, FileAccess.Read);
+                    StreamReader readIn = new StreamReader(StatsFile);
                 string header = readIn.ReadLine();
   
 
                     while (!readIn.EndOfStream)
                     {
                         StatsFromFile = readIn.ReadLine().Split(',');
-                        OneRow = new Stats(StatsFromFile[0], StatsFromFile[1], Convert.ToDouble(StatsFromFile[2]), StatsFromFile[3],
-                                            StatsFromFile[4], StatsFromFile[5], Convert.ToInt32(StatsFromFile[6]), StatsFromFile[7],
-                                            StatsFromFile[8], StatsFromFile[9], Convert.ToInt32(StatsFromFile[10]), StatsFromFile[11],
-                                            StatsFromFile[12], StatsFromFile[13], StatsFromFile[14]);
+                    
+                    
+                    OneRow = new Stats(StatsFromFile[0], StatsFromFile[1], Convert.ToDouble(StatsFromFile[2]), StatsFromFile[3],
+                                        StatsFromFile[4], StatsFromFile[5], Convert.ToInt32(StatsFromFile[6]), StatsFromFile[7],
+                                        StatsFromFile[8], StatsFromFile[9], Convert.ToInt32(StatsFromFile[10]), StatsFromFile[11],
+                                        StatsFromFile[12], StatsFromFile[13], StatsFromFile[14]);
+
+
+
+                    statsIn.Add(OneRow);
+                
+                    
 
                     
-                    statsIn.Add(OneRow);
-                    
+                   
+
+                   
+                    WriteDataTXT(FilePath, statsIn, StatsFromFile);
                     }
-                    readIn.Close();
-                    Stats.Close();
-              
+                    
                 
+
+                readIn.Close();
+                StatsFile.Close();
+                
+
             }
             
             catch (Exception e)
@@ -74,35 +125,29 @@ namespace Project_2
                 Console.ReadLine();
             }
 
-            WriteDataTXT(statsIn);
+            
 
         }//End of TXT
 
+        //Create Text File
+        
+
          //write the the csv to txt
-        public static void WriteDataTXT(List<Stats> statsIn)
+        public static void WriteDataTXT(string FilePath, List<Stats> statsIn, string[] StatsFromFile)
         {
             try
             {
-                string FilePath;
-                string FileName;
+                List<String> WinnerFromFile = new List<String>();
+                List<Double> DateFromFile = new List<Double>();
 
-                //Creating the txt File
-                Console.WriteLine("Please type the name of the file. (You don't need to type the extention)");
-                FileName = Console.ReadLine();
-                Console.WriteLine("Where would you like to save the file to?");
-                FilePath = Console.ReadLine() + @"\" + FileName + ".txt"; //The Full name of txt file
-                Console.WriteLine("Here is your full file name:");
-                Console.WriteLine(FilePath);
-                Console.ReadLine();
-
-                
                 TextWriter writeText = new StreamWriter(FilePath);
 
-                //Writing each row of statsIn to the txt file
+
+
+                writeText.WriteLine("List of SuperBowl Winners:");
                 foreach (var row in statsIn)
                 {
                     writeText.WriteLine(row);
-                    writeText.WriteLine();
                 }
 
 
@@ -121,7 +166,23 @@ namespace Project_2
             }
         }
 
- 
+
+        public static void HighestAtt(List<Stats> Stats)
+        {
+            var AttendSB = 
+            from Attend in Stats
+            where Attend.AttFromFile > 10000
+            orderby Attend.DateFromFile
+            select new { Attend.DateFromFile, Attend.WinnerFromFile, Attend.LoserFromFile, Attend.CityFromFile, Attend.StateFromFile, Attend.StadiumFromFile };
+
+            Console.WriteLine("The Top Five SuperBowls:");
+            foreach (var Attend in AttendSB)
+            {
+                Console.WriteLine($"Year: {Attend.DateFromFile[2]} \n Winning Team: {Attend.WinnerFromFile} \n Losing Team: {Attend.LoserFromFile } \n City: {Attend.CityFromFile } State: {Attend.StateFromFile } \n Stadium: {Attend.StadiumFromFile} ");
+            }
+        }
+        
+
 
         //HTML STARTING. COME BACK TO THIS IF YOU HAVE TIME.
         public static void ReadDataHTML()
@@ -130,6 +191,7 @@ namespace Project_2
             List<Stats> statsIn = new List<Stats>();
             string[] StatsFromFile;
             Stats OneRow;
+            
 
             try
             {
@@ -149,6 +211,7 @@ namespace Project_2
 
 
                     statsIn.Add(OneRow);
+                    
 
                 }
                 readIn.Close();
@@ -258,16 +321,42 @@ namespace Project_2
 
         }
 
+
+    }
+
+    class TopFive : Stats
+    {
+        public TopFive(string DateFromFile, string SBFromFile, double AttFromFile,
+            string QBWinFromFile, string CoachWinFromFile, string WinnerFromFile,
+            int WinPtFromFile, string QBLoserFromFile, string CoachLostFromFile,
+            string LoserFromFile, int LosingPtFromFile, string MVPFromFile,
+            string StadiumFromFile, string CityFromFile, string StateFromFile) : base(DateFromFile , SBFromFile,AttFromFile , QBWinFromFile , CoachWinFromFile , WinnerFromFile , WinPtFromFile , QBLoserFromFile , CoachLostFromFile , LoserFromFile ,LosingPtFromFile ,MVPFromFile , StadiumFromFile , CityFromFile , StateFromFile )
+        {
+            this.DateFromFile = DateFromFile;
+            this.SBFromFile = SBFromFile;
+            this.AttFromFile = AttFromFile;
+            this.QBWinFromFile = QBWinFromFile;
+            this.CoachWinFromFile = CoachWinFromFile;
+            this.WinnerFromFile = WinnerFromFile;
+            this.WinPtFromFile = WinPtFromFile;
+            this.QBLoserFromFile = QBLoserFromFile;
+            this.CoachLostFromFile = CoachLostFromFile;
+            this.LoserFromFile = LoserFromFile;
+            this.LosingPtFromFile = LosingPtFromFile;
+            this.MVPFromFile = MVPFromFile;
+            this.StadiumFromFile = StadiumFromFile;
+            this.CityFromFile = CityFromFile;
+            this.StateFromFile = StateFromFile;
+            
+
+        }
+
+
         public override string ToString()
         {
-            return String.Format($"Date: {DateFromFile} \nSuperBowl: {SBFromFile} \nAttendance: {AttFromFile} \nWinning QuarterBack: {QBWinFromFile} \nWinning Coach: {CoachWinFromFile} \nWinning Team:{WinnerFromFile}" +
-                                $"\nWinning Points: {WinPtFromFile} \nLosing QuarterBack: {QBLoserFromFile} \nLosing Coach: {CoachLostFromFile} \nLosing Team: {LoserFromFile} \nLosing Points: {LosingPtFromFile}" +
-                                $"\nMVP For the Game: {MVPFromFile} \nStadium: {StadiumFromFile} \nCity: {CityFromFile} \nState: {StateFromFile}");
+            return String.Format($"Date: {DateFromFile[2]} \n Winning Team: {WinnerFromFile} \n Losing Team: {LoserFromFile} \n City: {CityFromFile} \n State: {StateFromFile} \n Stadium: {StadiumFromFile} \n");
         }
-        
-
     }
 
     
 }
-
